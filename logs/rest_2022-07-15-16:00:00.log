@@ -1,0 +1,40 @@
+2022/07/15 16:12:33 User-Id: .
+--------------Rest API Response----------------
+Status-Code: 200
+Grpc-Metadata-Content-Type: [application/grpc]
+Content-Type: [application/json]
+Content: {
+ "success": true,
+ "code": "0000",
+ "desc": "SUCCESS"
+}
+-----------------------------------------------
+
+
+2022/07/15 16:12:58 User-Id: .
+--------------Rest API Response----------------
+Status-Code: 200
+Grpc-Metadata-Content-Type: [application/grpc]
+Content-Type: [application/json]
+Content: {
+ "success": true,
+ "code": "0000",
+ "desc": "SUCCESS",
+ "data": [
+  {
+   "username": "pass",
+   "email": "abc"
+  },
+  {
+   "username": "lupa",
+   "email": "def"
+  },
+  {
+   "username": "skip",
+   "email": "hij"
+  }
+ ]
+}
+-----------------------------------------------
+
+

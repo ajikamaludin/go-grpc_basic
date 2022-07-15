@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/ajikamaludin/go-grpc_basic/pkg/v1/utils/logger"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -61,7 +62,11 @@ func FormatError(c codes.Code, message *Response) error {
 		return status.Errorf(c, codes.Internal.String())
 	}
 
-	// TODO: logger store error
+	// STORE ERROR
+	err = logger.StoreError("", buf)
+	if err != nil {
+		return status.Errorf(c, codes.Internal.String())
+	}
 
 	return status.Errorf(c, string(buf))
 }

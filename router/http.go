@@ -9,11 +9,15 @@ import (
 	"github.com/ajikamaludin/go-grpc_basic/configs"
 	"github.com/ajikamaludin/go-grpc_basic/pkg/v1/utils/constants"
 	"github.com/ajikamaludin/go-grpc_basic/pkg/v1/utils/errors"
-	hlpb "github.com/ajikamaludin/go-grpc_basic/proto/v1/health"
+	"github.com/ajikamaludin/go-grpc_basic/pkg/v1/utils/logger"
 	"github.com/gorilla/handlers"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+
+	"github.com/golang/protobuf/proto"
+
+	hlpb "github.com/ajikamaludin/go-grpc_basic/proto/v1/health"
 )
 
 func NewHTTPServer(configs *configs.Configs, loggger *logrus.Logger) error {
@@ -25,15 +29,14 @@ func NewHTTPServer(configs *configs.Configs, loggger *logrus.Logger) error {
 	defer cancel()
 
 	// Connect to the GRPC server
-	address := fmt.Sprintf("0.0.0.0:%v", configs.Config.Server.Grpc.Port)
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	conn, err := grpc.Dial(fmt.Sprintf("0.0.0.0:%v", configs.Config.Server.Grpc.Port), grpc.WithInsecure())
 	if err != nil {
 		return err
 	}
 	defer conn.Close()
 
 	// Create new grpc-gateway
-	rmux := runtime.NewServeMux()
+	rmux := runtime.NewServeMux(runtime.WithForwardResponseOption(httpResponseModifier))
 
 	// register gateway endpoints
 	for _, f := range []func(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error{
@@ -45,21 +48,24 @@ func NewHTTPServer(configs *configs.Configs, loggger *logrus.Logger) error {
 		}
 	}
 
+	// create http server mux
 	mux := http.NewServeMux()
 	mux.Handle("/", rmux)
 
+	// run swagger server
 	if configs.Config.Env != constants.EnvProduction {
 		CreateSwagger(mux)
 	}
 
-	headerOk := handlers.AllowedHeaders([]string{"Accept", "Accept-Language", "Content-Language", "Content-Type", "X-Requested-With", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Timezone-Offset"})
+	// Where ORIGIN_ALLOWED is like `scheme://dns[:port]`, or `*` (insecure)
+	headersOk := handlers.AllowedHeaders([]string{"Accept", "Accept-Language", "Content-Language", "Content-Type", "X-Requested-With", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Timezone-Offset"})
 	originsOk := handlers.AllowedOrigins([]string{"*"})
 	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
 
 	// running rest http server
 	log.Println("[SERVER] REST HTTP server is ready")
 
-	err = http.ListenAndServe(fmt.Sprintf("0.0.0.0:%v", configs.Config.Server.Rest.Port), handlers.CORS(headerOk, originsOk, methodsOk)(mux))
+	err = http.ListenAndServe(fmt.Sprintf("0.0.0.0:%v", configs.Config.Server.Rest.Port), handlers.CORS(headersOk, originsOk, methodsOk)(mux))
 	if err != nil {
 		return err
 	}
@@ -73,8 +79,14 @@ func CreateSwagger(gwmux *http.ServeMux) {
 	gwmux.HandleFunc("/api/health/docs.json", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "swagger/docs.json")
 	})
+}
 
-	// 	// load swagger-ui file
-	// 	fs := http.FileServer(http.Dir("swagger/swagger-ui"))
-	// 	gwmux.Handle("/api/health/docs/", http.StripPrefix("/api/health/docs", fs))
+func httpResponseModifier(ctx context.Context, w http.ResponseWriter, p proto.Message) error {
+	// store response log
+	err := logger.StoreRestResponse(ctx, w, p)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

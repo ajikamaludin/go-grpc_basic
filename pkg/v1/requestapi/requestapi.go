@@ -5,12 +5,14 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"time"
 
 	"github.com/ajikamaludin/go-grpc_basic/pkg/v1/cert"
 	"github.com/ajikamaludin/go-grpc_basic/pkg/v1/utils/constants"
+	"github.com/ajikamaludin/go-grpc_basic/pkg/v1/utils/logger"
 )
 
 // Info is the http req info
@@ -30,6 +32,12 @@ type ResInfo struct {
 func Invoke(reqinf *ReqInfo, timeout time.Duration, crt *cert.Cert) (*ResInfo, error) {
 	var req *http.Request
 	var err error
+
+	// STORE request log
+	err = logger.StoreHifRequest(reqinf.URL, "", reqinf.Body, reqinf.HeadersInfo)
+	if err != nil {
+		return nil, err
+	}
 
 	switch reqinf.Method {
 	case constants.MethodGET:
@@ -55,12 +63,23 @@ func Invoke(reqinf *ReqInfo, timeout time.Duration, crt *cert.Cert) (*ResInfo, e
 	}
 	defer res.Body.Close()
 
+	var bufs bytes.Buffer
+
+	// duplicate streams
+	resdup := io.TeeReader(res.Body, &bufs)
+
+	// STORE response log
+	err = logger.StoreHifResponse(reqinf.URL, "", res.StatusCode, res.Header, resdup)
+	if err != nil {
+		return nil, err
+	}
+
 	if !(res.StatusCode == http.StatusOK || res.StatusCode == http.StatusCreated) {
 		return nil, errors.New(fmt.Sprintf("%v for %v", res.StatusCode, reqinf.URL))
 	}
 
 	// read body
-	buf, err := ioutil.ReadAll(res.Body)
+	buf, err := ioutil.ReadAll(&bufs)
 	if err != nil {
 		return nil, err
 	}

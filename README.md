@@ -186,9 +186,19 @@ import (
 - create `services/v1/jsonplaceholder` dir, create service name `jsonplaceholder.go`, implement any of endpoint http call from requestapi.go
 - create new method from service health and implement call jsonplaceholder service from there, check `api/v1/health/callapi.go`
 
-### Custom Error Reponse 
+### HTTP Custom Error Reponse 
 - create `pgk/v1/utils/errors/errors.go`, implement error handler for custom http
 - register runtime Http error in `http.go`
 ```go
 runtime.HTTPError = errors.CustomHTTPError
 ```
+
+### File Log
+- goal : create log file for every action like , request / response from / to client, request / response from / to other api, 
+- `go get github.com/lestrrat/go-file-rotatelogs`
+- create `pkg/v1/utils/logger/logger.go`, implement logger function to write log to file
+- implement logger for `pkg/v1/requestapi/requestapi.go` to log request and response api from other service
+- implement logger for `pkg/v1/utils/errors/errors.go` to log any of error from our service
+- implement logger for `router/http.go` to log response grpc rest api service 
+- `go run .`
+- test call method callapi will generate hif log, custom-error generate error log, call rest will generate rest log 

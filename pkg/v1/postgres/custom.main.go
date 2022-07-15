@@ -41,7 +41,6 @@ func (c *Conn) CustomMainSelect(filter *CustomMain) ([]*CustomMain, error) {
 	qsyntax = strings.TrimRight(qsyntax, "AND")
 	qsyntax = fmt.Sprintf(`%s;`, qsyntax)
 
-	fmt.Println(qsyntax)
 	db, err := sql.Open(POSTGRES, c.Conn)
 	if err != nil {
 		return nil, err
