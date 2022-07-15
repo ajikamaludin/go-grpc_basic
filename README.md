@@ -74,9 +74,9 @@ go-outline  grpcurl  protoc-gen-go-grpc  protoc-gen-swagger
 - create `api/v1/health/status.go` as method implment from protobuf / pb file 
 - create `router` dir in root project
 - create `grpc.go` in router dir and implement NewGRPCServer and register health api service 
-- `go get github.com/soheilhy/cmux`, is for ?
+- `go get github.com/soheilhy/cmux`, TODO: what is for ?
 - create `router.go` in router dir and implement IgnoreErr, this is for ignore error so can be safely ignore
-- `go get golang.org/x/sync/errgroup`, is for ?
+- `go get golang.org/x/sync/errgroup`, TODO: what is for ?
 - implement `main.go` to create grpc server from grpc.go with errgroup handler
 - `go run .`, run server grpc
 - `go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest`
