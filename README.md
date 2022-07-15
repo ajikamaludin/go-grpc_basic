@@ -1,6 +1,7 @@
 # GO GRPC BASIC
 
 ## Requirements
+check other branch to step by step create project 
 ### Validate Go Installation
 ```bash
 $ go version
