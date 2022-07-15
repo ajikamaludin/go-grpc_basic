@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/ajikamaludin/go-grpc_basic/configs"
+	"github.com/ajikamaludin/go-grpc_basic/pkg/v1/utils/constants"
 	hlpb "github.com/ajikamaludin/go-grpc_basic/proto/v1/health"
 	"github.com/gorilla/handlers"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -44,9 +45,9 @@ func NewHTTPServer(configs *configs.Configs, loggger *logrus.Logger) error {
 	mux := http.NewServeMux()
 	mux.Handle("/", rmux)
 
-	// if configs.Config.Env != constants.EnvProduction {
-	// 	CreateSwagger(mux)
-	// }
+	if configs.Config.Env != constants.EnvProduction {
+		CreateSwagger(mux)
+	}
 
 	headerOk := handlers.AllowedHeaders([]string{"Accept", "Accept-Language", "Content-Language", "Content-Type", "X-Requested-With", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization", "Timezone-Offset"})
 	originsOk := handlers.AllowedOrigins([]string{"*"})
@@ -64,13 +65,13 @@ func NewHTTPServer(configs *configs.Configs, loggger *logrus.Logger) error {
 }
 
 // // CreateSwagger creates the swagger server serve mux.
-// func CreateSwagger(gwmux *http.ServeMux) {
-// 	// register swagger service server
-// 	gwmux.HandleFunc("/api/health/docs.json", func(w http.ResponseWriter, r *http.Request) {
-// 		http.ServeFile(w, r, "swagger/docs.json")
-// 	})
+func CreateSwagger(gwmux *http.ServeMux) {
+	// 	// register swagger service server
+	gwmux.HandleFunc("/api/health/docs.json", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "swagger/docs.json")
+	})
 
-// 	// load swagger-ui file
-// 	fs := http.FileServer(http.Dir("swagger/swagger-ui"))
-// 	gwmux.Handle("/api/health/docs/", http.StripPrefix("/api/health/docs", fs))
-// }
+	// 	// load swagger-ui file
+	// 	fs := http.FileServer(http.Dir("swagger/swagger-ui"))
+	// 	gwmux.Handle("/api/health/docs/", http.StripPrefix("/api/health/docs", fs))
+}

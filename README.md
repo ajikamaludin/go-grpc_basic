@@ -46,7 +46,7 @@
 ``` 
 - or test via postman , new -> grpc request -> Enter Server Url : localhost:5566 -> Import proto file / Select Method : Status -> Click Invoke
 
-### Implment gRPC-Gateway
+### Implement gRPC-Gateway
 ref https://github.com/grpc-ecosystem/grpc-gateway
 - implement `import "google/api/annotations.proto";` in proto file 
 - changes line below in all service methods for rest compile to rest  
@@ -71,4 +71,24 @@ g.Go(func() error { return router.NewHTTPServer(configs, logger) })
 - test `curl localhost:8080/api/v1/health/status`, reponse
 ```
 {"success":true,"code":"0000","desc":"SUCCESS"}
+```
+- GENERATE API DOCS: 
+- `mkdir swagger`
+- `cd proto`
+- `./gen-apidoc.sh`
+- register apidoc to http server in `http.go` implement 
+```
+#########
+
+if configs.Config.Env != constants.EnvProduction {
+	CreateSwagger(mux)
+}
+
+##########
+
+func CreateSwagger(gwmux *http.ServeMux) {
+	gwmux.HandleFunc("/api/health/docs.json", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "swagger/docs.json")
+	})
+}
 ```
