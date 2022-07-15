@@ -1,6 +1,7 @@
 # GO GRPC BASIC
 
 ## Requirements
+check other branch to step by step create project 
 ### Validate Go Installation
 ```bash
 $ go version
@@ -175,7 +176,7 @@ import (
 - create `pkg/v1/utils/converter` dir, create `converter.go` file in there, to convert camelcase to snake_case
 - create `pkg/v1/postgres/custom.main.go` to implement all query to database table custom
 - changes `configs/configs.go` to bundle pg connection
-- how to use custom.main.go call function from custom main in api status, check `api/v1/health/status.go`
+- how to use custom.main.go call function from api calldb, check `api/v1/health/calldb.go`
 
 ### Example of call Other Rest API
 - add new environtment to `config.yaml` add cert path
@@ -184,4 +185,11 @@ import (
 - create `pkg/v1/cert` dir, create `cert.go`, this file is for handle Insecure ssl connection (self gen cert)
 - create `pkg/v1/requestapi` dir, create `requestapi.go`, implement http call 
 - create `services/v1/jsonplaceholder` dir, create service name `jsonplaceholder.go`, implement any of endpoint http call from requestapi.go
-- create new method from service health and implement call jsonplaceholder service from there ex: `api/v1/health/callapi.go`
+- create new method from service health and implement call jsonplaceholder service from there, check `api/v1/health/callapi.go`
+
+### HTTP Custom Error Reponse 
+- create `pgk/v1/utils/errors/errors.go`, implement error handler for custom http
+- register runtime Http error in `http.go`
+```go
+runtime.HTTPError = errors.CustomHTTPError
+```
