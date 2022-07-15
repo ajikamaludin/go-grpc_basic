@@ -3,7 +3,8 @@
 ## Requirements
 ### Validate Go Installation
 ```bash
-go version
+$ go version
+go version go1.18.3 linux/amd64
 ```
 
 ### Validate GOPATH
@@ -28,7 +29,8 @@ https://grpc.io/docs/protoc-installation/
 
 ### Validate Protoc Installation
 ```bash
-protoc --version
+$ protoc --version
+libprotoc 3.21.2
 ```
 
 ### Install Protoc Dependecy for Golang
@@ -43,6 +45,11 @@ go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway@latest
 go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger@latest
 ```
 
+### Add PATH
+add to your ~/.bashrc or ~/.zshrc file
+```bash
+export PATH="$PATH:$GOPATH/bin"
+```
 ### Validate Protoc Dependency Golang Installation
 ```bash
 ~ ❯ ls $GOPATH/bin                                             
@@ -79,7 +86,7 @@ go-outline  grpcurl  protoc-gen-go-grpc  protoc-gen-swagger
 - `go get golang.org/x/sync/errgroup`, TODO: what is for ?
 - implement `main.go` to create grpc server from grpc.go with errgroup handler
 - `go run .`, run server grpc
-- `go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest`
+- `go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest`, this tool is 
 - test `grpcurl -plaintext localhost:5566 list`, to show list name of services
 - test `grpcurl -plaintext localhost:5566 list api.gogrpc.v1.health.HealthService`, to show list name of service methods
 - test `grpcurl -plaintext localhost:5566 api.gogrpc.v1.health.HealthService.Status`, to test method call in grpc 
@@ -108,7 +115,7 @@ service HealthService {
 ```
 - re - compile / re - generate proto with `compile-proto.sh` in proto dir
 - `go mod tidy`
-- `go get "github.com/gorilla/handlers"`
+- `go get "github.com/gorilla/handlers"` TODO: what is for ?
 - create `http.go` in router dir and implement NewHTTPServer and register health api service 
 - register httpserver to `main.go`
 ```go
