@@ -196,7 +196,7 @@ runtime.HTTPError = errors.CustomHTTPError
 
 ### File Logger
 - goal : create log file for every action like , request / response from / to client, request / response from / to other api, 
-- `go get github.com/lestrrat/go-file-rotatelogs`
+- `go get github.com/lestrrat/go-file-rotatelogs`, this lib for create rotate log file automated
 - create `pkg/v1/utils/logger/logger.go`, implement logger function to write log to file
 - implement logger for `pkg/v1/requestapi/requestapi.go` to log request and response api from other service
 - implement logger for `pkg/v1/utils/errors/errors.go` to log any of error from our service
