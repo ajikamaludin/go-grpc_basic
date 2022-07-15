@@ -126,7 +126,7 @@ g.Go(func() error { return router.NewHTTPServer(configs, logger) })
 - GENERATE API DOCS: 
 - `mkdir swagger`
 - `cd proto`
-- `./gen-apidoc.sh`
+- `./gen-apidoc.sh`, will be generated in `swagger/docs.json
 - register apidoc to http server in `http.go` implement 
 ```go
 /////////
