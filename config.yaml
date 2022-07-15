@@ -5,3 +5,9 @@ server:
     port: 5566
   rest:
     port: 8080
+postgres:
+  host: 127.0.0.1
+  port: 5432
+  dbname: test
+  username: aji
+  password: eta

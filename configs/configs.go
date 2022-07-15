@@ -4,12 +4,14 @@ import (
 	"log"
 
 	"github.com/ajikamaludin/go-grpc_basic/pkg/v1/config"
+	"github.com/ajikamaludin/go-grpc_basic/pkg/v1/postgres"
 	"github.com/sirupsen/logrus"
 )
 
 // bundle/wrap another service access here
 type Configs struct {
 	Config *config.Config
+	Pg     *postgres.Conn
 }
 
 func New() (*Configs, *logrus.Logger, error) {
@@ -32,9 +34,14 @@ func New() (*Configs, *logrus.Logger, error) {
 
 	logger.Info("[CONFIG] Setup complete")
 
-	// TODO: pg letter
+	// Test Pg Con
+	pg, err := postgres.New(config)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	return &Configs{
 		Config: config,
+		Pg:     pg,
 	}, logger, nil
 }

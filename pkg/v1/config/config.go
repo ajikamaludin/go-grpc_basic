@@ -21,6 +21,13 @@ type Config struct {
 			Port int `yaml:"port"`
 		} `yaml:"rest"`
 	} `yaml:"server"`
+	Postgres struct {
+		Host     string `yaml:"host"`
+		Port     int    `yaml:"port"`
+		Dbname   string `yaml:"dbname"`
+		Username string `yaml:"username"`
+		Password string `yaml:"password"`
+	} `yaml:"postgres"`
 }
 
 func New() (*Config, error) {
@@ -98,6 +105,22 @@ func validateConfigData(config *Config) error {
 	}
 	if config.Server.Rest.Port == 0 {
 		return errors.New("server.rest.port is empty")
+	}
+
+	if config.Postgres.Host == "" {
+		return errors.New("postgres.host is empty")
+	}
+	if config.Postgres.Port == 0 {
+		return errors.New("postgres.port is empty")
+	}
+	if config.Postgres.Dbname == "" {
+		return errors.New("postgres.dbname is empty")
+	}
+	if config.Postgres.Username == "" {
+		return errors.New("postgres.user is empty")
+	}
+	if config.Postgres.Password == "" {
+		return errors.New("postgres.pass is empty")
 	}
 
 	return nil

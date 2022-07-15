@@ -70,7 +70,11 @@ g.Go(func() error { return router.NewHTTPServer(configs, logger) })
 - `go run .` run grpc and http server
 - test `curl localhost:8080/api/v1/health/status`, reponse
 ```
-{"success":true,"code":"0000","desc":"SUCCESS"}
+{
+    "success":true,
+    "code":"0000",
+    "desc":"SUCCESS"
+}
 ```
 - GENERATE API DOCS: 
 - `mkdir swagger`
@@ -92,3 +96,22 @@ func CreateSwagger(gwmux *http.ServeMux) {
 	})
 }
 ```
+
+### Implement DB_Connection (With PostgreSQL)
+- Execute `example.sql` in db, you know how to do it
+- add `config.yaml` with line below 
+```
+postgres:
+  host: 127.0.0.1
+  port: 5432
+  dbname: test
+  username: postgres
+  password: mysecretpassword
+```
+- changes `pkg/v1/config/config.go` to add new config line in config struct and and validateConfigData rule
+- `go get github.com/lib/pq`
+- create `pkg/v1/postgres` dir, create `postgres.go` file in there implement string conn and test connection
+- create `pkg/v1/utils/converter` dir, create `converter.go` file in there, to convert camelcase to snake_case
+- create `pkg/v1/postgres/custom.main.go` to implement all query to database table custom
+- changes `configs/configs.go` to bundle pg connection
+- how to use custom.main.go call function from custom main in api status, check `api/v1/health/status.go`
