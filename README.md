@@ -1,9 +1,56 @@
 # GO GRPC BASIC
 
-### Requirements ( Do It Letter )
--
--
+## Requirements
+### Validate Go Installation
+```bash
+go version
+```
 
+### Validate GOPATH
+```bash
+echo $GOPATH
+```
+
+### Start Project in Go
+```bash
+cd $GOPATH/src
+mkdir -p github.com/ajikamaludin/go-grpc_basic 
+cd github.com/ajikamaludin/go-grpc_basic 
+go mod init github.com/ajikamaludin/go-grpc_basic
+go mod tidy
+```
+
+### Install Protoc
+Linux : Download Zip, Extrac local, add PATH
+```
+https://grpc.io/docs/protoc-installation/
+```
+
+### Validate Protoc Installation
+```bash
+protoc --version
+```
+
+### Install Protoc Dependecy for Golang
+```bash
+# protoc-gen-go
+go install github.com/golang/protobuf/protoc-gen-go@latest
+# proto (optional, execute in project dir)
+go get google.golang.org/protobuf/proto@latest
+# protoc-gen-grpc-gateway
+go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway@latest
+# protoc-gen-swagger
+go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger@latest
+```
+
+### Validate Protoc Dependency Golang Installation
+```bash
+~ ❯ ls $GOPATH/bin                                             
+dlv         gopls    protoc-gen-go       protoc-gen-grpc-gateway  revel
+go-outline  grpcurl  protoc-gen-go-grpc  protoc-gen-swagger
+```
+
+## Start Project
 ### Setup Project 
 - create `proto` dir 
 - create versioning dir and service dir `health`
@@ -37,7 +84,7 @@
 - test `grpcurl -plaintext localhost:5566 list api.gogrpc.v1.health.HealthService`, to show list name of service methods
 - test `grpcurl -plaintext localhost:5566 api.gogrpc.v1.health.HealthService.Status`, to test method call in grpc 
 - result 
-```
+```json
 {
     "success": true,
     "code": "0000",
@@ -50,12 +97,12 @@
 ref https://github.com/grpc-ecosystem/grpc-gateway
 - implement `import "google/api/annotations.proto";` in proto file 
 - changes line below in all service methods for rest compile to rest  
-```
+```proto
 service HealthService {
     rpc Status(google.protobuf.Empty) returns (Response) {
-        + option (google.api.http) = {
-        +    get: "/api/gogrpc/v1/health/status"
-        + };
+        option (google.api.http) = {
+           get: "/api/gogrpc/v1/health/status"
+        };
     }
 }
 ```
@@ -64,12 +111,12 @@ service HealthService {
 - `go get "github.com/gorilla/handlers"`
 - create `http.go` in router dir and implement NewHTTPServer and register health api service 
 - register httpserver to `main.go`
-```
+```go
 g.Go(func() error { return router.NewHTTPServer(configs, logger) })
 ```
 - `go run .` run grpc and http server
 - test `curl localhost:8080/api/v1/health/status`, reponse
-```
+```json
 {
     "success":true,
     "code":"0000",
@@ -81,14 +128,14 @@ g.Go(func() error { return router.NewHTTPServer(configs, logger) })
 - `cd proto`
 - `./gen-apidoc.sh`
 - register apidoc to http server in `http.go` implement 
-```
-#########
+```go
+/////////
 
 if configs.Config.Env != constants.EnvProduction {
 	CreateSwagger(mux)
 }
 
-##########
+/////////
 
 func CreateSwagger(gwmux *http.ServeMux) {
 	gwmux.HandleFunc("/api/health/docs.json", func(w http.ResponseWriter, r *http.Request) {
@@ -100,7 +147,7 @@ func CreateSwagger(gwmux *http.ServeMux) {
 ### Implement DB_Connection (With PostgreSQL)
 - Execute `example.sql` in db, you know how to do it
 - add `config.yaml` with line below 
-```
+```yaml
 postgres:
   host: 127.0.0.1
   port: 5432
