@@ -35,4 +35,10 @@ service HealthService {
             get: "/api/v1/health/callapi"
         };
     }
+
+    rpc CallDb(google.protobuf.Empty) returns (Response) {
+        option (google.api.http) = {
+            get: "/api/v1/health/calldb"
+        };
+    }
 }
