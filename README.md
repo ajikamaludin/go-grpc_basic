@@ -185,3 +185,10 @@ import (
 - create `pkg/v1/requestapi` dir, create `requestapi.go`, implement http call 
 - create `services/v1/jsonplaceholder` dir, create service name `jsonplaceholder.go`, implement any of endpoint http call from requestapi.go
 - create new method from service health and implement call jsonplaceholder service from there, check `api/v1/health/callapi.go`
+
+### Custom Error Reponse 
+- create `pgk/v1/utils/errors/errors.go`, implement error handler for custom http
+- register runtime Http error in `http.go`
+```go
+runtime.HTTPError = errors.CustomHTTPError
+```

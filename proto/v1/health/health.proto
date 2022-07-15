@@ -41,4 +41,10 @@ service HealthService {
             get: "/api/v1/health/calldb"
         };
     }
+
+    rpc CallCustomError(google.protobuf.Empty) returns (Response) {
+        option (google.api.http) = {
+            get: "/api/v1/health/custom-error"
+        };
+    }
 }

@@ -8,6 +8,7 @@ import (
 
 	"github.com/ajikamaludin/go-grpc_basic/configs"
 	"github.com/ajikamaludin/go-grpc_basic/pkg/v1/utils/constants"
+	"github.com/ajikamaludin/go-grpc_basic/pkg/v1/utils/errors"
 	hlpb "github.com/ajikamaludin/go-grpc_basic/proto/v1/health"
 	"github.com/gorilla/handlers"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -16,6 +17,8 @@ import (
 )
 
 func NewHTTPServer(configs *configs.Configs, loggger *logrus.Logger) error {
+	// create custom http errors
+	runtime.HTTPError = errors.CustomHTTPError
 
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
