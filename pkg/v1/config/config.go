@@ -28,6 +28,9 @@ type Config struct {
 		Username string `yaml:"username"`
 		Password string `yaml:"password"`
 	} `yaml:"postgres"`
+	Cert struct {
+		Path string `yaml:"path"`
+	} `yaml:"cert"`
 }
 
 func New() (*Config, error) {
@@ -121,6 +124,9 @@ func validateConfigData(config *Config) error {
 	}
 	if config.Postgres.Password == "" {
 		return errors.New("postgres.pass is empty")
+	}
+	if config.Cert.Path == "" {
+		return errors.New("cert.path is empty")
 	}
 
 	return nil

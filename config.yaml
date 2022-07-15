@@ -11,3 +11,5 @@ postgres:
   dbname: test
   username: aji
   password: eta
+cert:
+  path: certfile.pem

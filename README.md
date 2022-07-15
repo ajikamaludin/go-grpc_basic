@@ -176,3 +176,12 @@ import (
 - create `pkg/v1/postgres/custom.main.go` to implement all query to database table custom
 - changes `configs/configs.go` to bundle pg connection
 - how to use custom.main.go call function from custom main in api status, check `api/v1/health/status.go`
+
+### Example of call Other Rest API
+- add new environtment to `config.yaml` add cert path
+- changes `pkg/v1/config/config.go` to validate and add  new environtment 
+- changes `pkg/v1/utils/constants` append method POST/GET/PUT/DELETE constant, JsonType Header, Hostname endpoint
+- create `pkg/v1/cert` dir, create `cert.go`, this file is for handle Insecure ssl connection (self gen cert)
+- create `pkg/v1/requestapi` dir, create `requestapi.go`, implement http call 
+- create `services/v1/jsonplaceholder` dir, create service name `jsonplaceholder.go`, implement any of endpoint http call from requestapi.go
+- create new method from service health and implement call jsonplaceholder service from there ex: `api/v1/health/callapi.go`

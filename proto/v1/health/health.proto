@@ -7,16 +7,32 @@ option go_package = "github.com/ajikamaludin/go-grpc_basic/proto/v1/health";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
+message Data {
+    uint32 id = 1;
+    string name = 2;
+    string username = 3;
+    string email = 4;
+    string phone = 5;
+    string website = 6;
+}
+
 message Response {
     bool success = 1;
     string code = 2;
     string desc = 3;
+    repeated Data data = 4;
 }
 
 service HealthService {
     rpc Status(google.protobuf.Empty) returns (Response) {
         option (google.api.http) = {
             get: "/api/v1/health/status"
+        };
+    }
+
+    rpc CallApi(google.protobuf.Empty) returns (Response) {
+        option (google.api.http) = {
+            get: "/api/v1/health/callapi"
         };
     }
 }
