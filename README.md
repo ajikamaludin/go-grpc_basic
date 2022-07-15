@@ -164,7 +164,13 @@ postgres:
   password: mysecretpassword
 ```
 - changes `pkg/v1/config/config.go` to add new config line in config struct and and validateConfigData rule
-- `go get github.com/lib/pq`
+- `go get github.com/lib/pq`, this is a lib for standart go lib `database/sql` to connect postgresql, usage in call
+```go
+import (
+    _ "github.com/lib/pq"
+)
+// ref : https://github.com/lib/pq
+```
 - create `pkg/v1/postgres` dir, create `postgres.go` file in there implement string conn and test connection
 - create `pkg/v1/utils/converter` dir, create `converter.go` file in there, to convert camelcase to snake_case
 - create `pkg/v1/postgres/custom.main.go` to implement all query to database table custom
