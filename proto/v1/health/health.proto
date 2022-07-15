@@ -4,7 +4,7 @@ package api.gogrpc.v1.health;
 
 option go_package = "github.com/ajikamaludin/go-grpc_basic/proto/v1/health";
 
-// import "lib/google/api/annotations.proto";
+import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
 message Response {
@@ -14,5 +14,9 @@ message Response {
 }
 
 service HealthService {
-    rpc Status(google.protobuf.Empty) returns (Response) {}
+    rpc Status(google.protobuf.Empty) returns (Response) {
+        option (google.api.http) = {
+            get: "/api/v1/health/status"
+        };
+    }
 }

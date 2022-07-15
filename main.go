@@ -49,6 +49,7 @@ func main() {
 	})
 
 	g.Go(func() error { return router.NewGRPCServer(configs, logger) })
+	g.Go(func() error { return router.NewHTTPServer(configs, logger) })
 
 	if err := g.Wait(); !router.IgnoreErr(err) {
 		log.Printf("[SERVER] ERROR %v", err)

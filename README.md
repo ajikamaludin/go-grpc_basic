@@ -1,6 +1,8 @@
 # GO GRPC BASIC
 
 ### Requirements ( Do It Letter )
+-
+-
 
 ### Setup Project 
 - create `proto` dir 
@@ -29,6 +31,7 @@
 - create `router.go` in router dir and implement IgnoreErr, this is for ignore error so can be safely ignore
 - `go get golang.org/x/sync/errgroup`, is for ?
 - implement `main.go` to create grpc server from grpc.go with errgroup handler
+- `go run .`, run server grpc
 - `go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest`
 - test `grpcurl -plaintext localhost:5566 list`, to show list name of services
 - test `grpcurl -plaintext localhost:5566 list api.gogrpc.v1.health.HealthService`, to show list name of service methods
@@ -42,3 +45,30 @@
 }
 ``` 
 - or test via postman , new -> grpc request -> Enter Server Url : localhost:5566 -> Import proto file / Select Method : Status -> Click Invoke
+
+### Implment gRPC-Gateway
+ref https://github.com/grpc-ecosystem/grpc-gateway
+- implement `import "google/api/annotations.proto";` in proto file 
+- changes line below in all service methods for rest compile to rest  
+```
+service HealthService {
+    rpc Status(google.protobuf.Empty) returns (Response) {
+        + option (google.api.http) = {
+        +    get: "/api/gogrpc/v1/health/status"
+        + };
+    }
+}
+```
+- re - compile / re - generate proto with `compile-proto.sh` in proto dir
+- `go mod tidy`
+- `go get "github.com/gorilla/handlers"`
+- create `http.go` in router dir and implement NewHTTPServer and register health api service 
+- register httpserver to `main.go`
+```
+g.Go(func() error { return router.NewHTTPServer(configs, logger) })
+```
+- `go run .` run grpc and http server
+- test `curl localhost:8080/api/v1/health/status`, reponse
+```
+{"success":true,"code":"0000","desc":"SUCCESS"}
+```
