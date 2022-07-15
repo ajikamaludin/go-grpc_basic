@@ -22,7 +22,8 @@ go mod tidy
 ```
 
 ### Install Protoc
-Linux : Download Zip, Extrac local, add PATH
+Linux : Download zip file, extract zip file to ~/.local/, add PATH ~/.local/bin
+please read documentation from this link for more detail information
 ```
 https://grpc.io/docs/protoc-installation/
 ```
