@@ -1,0 +1,7 @@
+env: development
+server:
+  host: 127.0.0.1
+  grpc:
+    port: 5566
+  rest:
+    port: 8080

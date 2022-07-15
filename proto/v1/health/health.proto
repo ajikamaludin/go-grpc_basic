@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package api.gogrpc.v1.health;
+
+option go_package = "github.com/ajikamaludin/go-grpc_basic/proto/v1/health";
+
+// import "lib/google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+message Response {
+    bool success = 1;
+    string code = 2;
+    string desc = 3;
+}
+
+service HealthService {
+    rpc Status(google.protobuf.Empty) returns (Response) {}
+}
