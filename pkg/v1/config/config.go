@@ -46,7 +46,7 @@ func GetInstance() (*Config, error) {
 	if config == nil {
 		lock.Lock()
 		defer lock.Unlock()
-		config, err := new()
+		config, err := New()
 		if err != nil {
 			return nil, err
 		}
@@ -55,7 +55,7 @@ func GetInstance() (*Config, error) {
 	return config, nil
 }
 
-func new() (*Config, error) {
+func New() (*Config, error) {
 	cfgPath, err := parseFlag()
 	if err != nil {
 		log.Fatal(err)

@@ -207,6 +207,23 @@ runtime.HTTPError = errors.CustomHTTPError
 ### Jwt ( Json Web Tokens ) Auth 
 - add jwt configs to `config.yaml`, jwt: issuer: ajikamaludin, key: P@ssw0rd, type: Bearer
 - changes `pkg/v1/config/config.go` add new config struct and validate config, **[UPDATE]** change New to GetInstance for singleton config
+```go
+var lock = &sync.Mutex{}
+var config *Config
+
+func GetInstance() (*Config, error) {
+	if config == nil {
+		lock.Lock()
+		defer lock.Unlock()
+		config, err := New()
+		if err != nil {
+			return nil, err
+		}
+		return config, nil
+	}
+	return config, nil
+}
+```
 - changes `pkg/v1/utils/constants/constants.go` to add new const for jwt token expired and refresh token expired
 - `go get github.com/dgrijalva/jwt-go`, lib to handle jwt token in go
 - create new pkg `pkg/v1/jwt/jwt.go`, implement Generate token and Claim token
