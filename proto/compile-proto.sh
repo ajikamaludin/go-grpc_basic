@@ -1,7 +1,11 @@
 #!/bin/bash
 WORKDIR=github.com/ajikamaludin/go-grpc_basic
 
-protoc \
+set -ve
+
+for x in $(ls v1)
+do
+      protoc \
       -I. \
       -I/usr/local/include \
       -I${GOPATH}/src \
@@ -9,4 +13,6 @@ protoc \
       -I${GOPATH}/src/$WORKDIR/proto/lib \
       --go_out=plugins=grpc:$GOPATH/src \
       --grpc-gateway_out=logtostderr=true:$GOPATH/src \
-      v1/*/*.proto
+      v1/$x/$x.proto
+done
+

@@ -203,3 +203,50 @@ runtime.HTTPError = errors.CustomHTTPError
 - implement logger for `router/http.go` to log response grpc rest api service 
 - `go run .`
 - test call method callapi will generate hif log, custom-error generate error log, call rest will generate rest log 
+
+### Jwt ( Json Web Tokens ) Auth 
+- add jwt configs to `config.yaml`, jwt: issuer: ajikamaludin, key: P@ssw0rd, type: Bearer
+- changes `pkg/v1/config/config.go` add new config struct and validate config, [UPDATE] change New to GetInstance for singleton config
+- changes `pkg/v1/utils/constants/constants.go` to add new const for jwt token expired and refresh token expired
+- `go get github.com/dgrijalva/jwt-go`, lib to handle jwt token in go
+- create new pkg `pkg/v1/jwt/jwt.go`, implement Generate token and Claim token
+- create new proto `proto/v1/auth/auth.proto` auth for login and register service, recompile `sh compile-proto.sh` [UPDATE]
+- implement `api/v1/auth/auth.go`, `api/v1/auth/login.go` and `api/v1/auth/register.go`
+- register new grpc service to grpc server
+```go
+authpb.RegisterAuthServiceServer(grpcServer, auth.New(configs, logger))
+```
+- register new grp service to grpc gateay (http.go)
+```go
+authpb.RegisterAuthServiceHandler,
+```
+- implement middleware in grpc server, for check jwtoken in every request , and add 
+```go
+    grpcServer := grpc.NewServer(
+		grpc.UnaryInterceptor(
+			grpc_middleware.ChainUnaryServer(
+				authInterceptor,
+			),
+		),
+	)
+```
+- test call login with any userid and password
+```bash
+curl -X POST -d '{"userId":"aji","password":"pass"}' http://localhost:8080/api/v1/auth/login
+```
+- result
+```json
+{
+    "success":true,
+    "code":"0000",
+    "desc":"SUCCESS",
+    "auth":
+        {
+            "type":"Bearer",
+            "access":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWppIiwiZXhwIjoxNjU4MTU2Njk5LCJpc3MiOiJiYW5rcmF5YSJ9.5o3b0twKzuqVzPtS68GMD6pw91m4JbCaJrg57iQw06A",
+            "expiredPeriode":3600,
+            "refresh":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWppIiwiaXNSZWZyZXNoIjp0cnVlLCJleHAiOjE2NTgxNTY2OTksImlzcyI6ImJhbmtyYXlhIn0.C8ZF9JFYWJIg3A0f9Ax2kWlPd1LJPeKZtDOSjX_KW6E"
+        }
+}
+```
+- use access token to access other resource / service - method

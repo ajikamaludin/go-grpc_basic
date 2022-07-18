@@ -30,8 +30,10 @@ require (
 )
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/handlers v1.5.1
+	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/lestrrat/go-file-rotatelogs v0.0.0-20180223000712-d3151e2a480f
 	golang.org/x/net v0.0.0-20201202161906-c7110b5ffcbb // indirect
 	golang.org/x/sys v0.0.0-20210119212857-b64e53b001e4 // indirect

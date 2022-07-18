@@ -13,3 +13,7 @@ postgres:
   password: eta
 cert:
   path: certfile.pem
+jwt:
+  issuer: ajikamaludin
+  key: P@ssw0rd
+  type: Bearer

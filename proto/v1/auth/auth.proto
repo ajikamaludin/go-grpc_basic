@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package api.gogrpc.v1.auth;
+
+option go_package = "github.com/ajikamaludin/go-grpc_basic/proto/v1/auth";
+
+import "google/api/annotations.proto";
+
+message Request {
+    string userId = 1;
+    string password = 2;
+}
+
+message Auth {
+    string type = 1;
+    string access = 2;
+    int32 expiredPeriode = 3;
+    string refresh = 4;
+}
+
+message Response {
+    bool success = 1;
+    string code = 2;
+    string desc = 3;
+    Auth auth = 4;
+}
+
+service AuthService {
+    rpc Login(Request) returns (Response) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/login",
+            body:"*"
+        };
+    }
+
+    rpc Register(Request) returns (Response) {
+        option (google.api.http) = {
+            post: "/api/v1/auth/register",
+            body:"*"
+        };
+    }
+}

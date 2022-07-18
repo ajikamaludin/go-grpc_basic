@@ -15,7 +15,7 @@ type Configs struct {
 }
 
 func New() (*Configs, *logrus.Logger, error) {
-	config, err := config.New()
+	config, err := config.GetInstance()
 
 	if err != nil {
 		return nil, nil, err

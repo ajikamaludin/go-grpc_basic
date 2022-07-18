@@ -17,6 +17,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
+	authpb "github.com/ajikamaludin/go-grpc_basic/proto/v1/auth"
 	hlpb "github.com/ajikamaludin/go-grpc_basic/proto/v1/health"
 )
 
@@ -42,6 +43,7 @@ func NewHTTPServer(configs *configs.Configs, loggger *logrus.Logger) error {
 	for _, f := range []func(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error{
 		// register grpc service handler
 		hlpb.RegisterHealthServiceHandler,
+		authpb.RegisterAuthServiceHandler,
 	} {
 		if err = f(ctx, rmux, conn); err != nil {
 			return err

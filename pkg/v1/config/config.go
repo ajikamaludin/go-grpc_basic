@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sync"
 
 	"gopkg.in/yaml.v2"
 )
@@ -31,15 +32,36 @@ type Config struct {
 	Cert struct {
 		Path string `yaml:"path"`
 	} `yaml:"cert"`
+	Jwt struct {
+		Issuer string `yaml:"issuer"`
+		Key    string `yaml:"key"`
+		Type   string `yaml:"type"`
+	} `yaml:"jwt"`
 }
 
-func New() (*Config, error) {
+var lock = &sync.Mutex{}
+var config *Config
+
+func GetInstance() (*Config, error) {
+	if config == nil {
+		lock.Lock()
+		defer lock.Unlock()
+		config, err := new()
+		if err != nil {
+			return nil, err
+		}
+		return config, nil
+	}
+	return config, nil
+}
+
+func new() (*Config, error) {
 	cfgPath, err := parseFlag()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	config := &Config{}
+	config = &Config{}
 
 	file, err := os.Open(cfgPath)
 	if err != nil {
@@ -127,6 +149,15 @@ func validateConfigData(config *Config) error {
 	}
 	if config.Cert.Path == "" {
 		return errors.New("cert.path is empty")
+	}
+	if config.Jwt.Issuer == "" {
+		return errors.New("jwt.issuer is empty")
+	}
+	if config.Jwt.Key == "" {
+		return errors.New("jwt.key is empty")
+	}
+	if config.Jwt.Type == "" {
+		return errors.New("jwt.type is empty")
 	}
 
 	return nil
