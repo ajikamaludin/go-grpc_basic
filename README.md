@@ -206,11 +206,11 @@ runtime.HTTPError = errors.CustomHTTPError
 
 ### Jwt ( Json Web Tokens ) Auth 
 - add jwt configs to `config.yaml`, jwt: issuer: ajikamaludin, key: P@ssw0rd, type: Bearer
-- changes `pkg/v1/config/config.go` add new config struct and validate config, <span style="color: black;background-color: #FFFF00">[UPDATE]</span> change New to GetInstance for singleton config
+- changes `pkg/v1/config/config.go` add new config struct and validate config, **[UPDATE]** change New to GetInstance for singleton config
 - changes `pkg/v1/utils/constants/constants.go` to add new const for jwt token expired and refresh token expired
 - `go get github.com/dgrijalva/jwt-go`, lib to handle jwt token in go
 - create new pkg `pkg/v1/jwt/jwt.go`, implement Generate token and Claim token
-- create new proto `proto/v1/auth/auth.proto` auth for login and register service, recompile `sh compile-proto.sh` <span style="color: black;background-color: #FFFF00">[UPDATE]</span>
+- create new proto `proto/v1/auth/auth.proto` auth for login and register service, recompile `sh compile-proto.sh` **[UPDATE]**
 - implement `api/v1/auth/auth.go`, `api/v1/auth/login.go` and `api/v1/auth/register.go`
 - register new grpc service to grpc server
 ```go
