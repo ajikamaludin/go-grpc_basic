@@ -33,11 +33,11 @@ $ echo $GOPATH
 
 ### Start Project in Go
 ```bash
-cd $GOPATH/src
-mkdir -p github.com/ajikamaludin/go-grpc_basic 
-cd github.com/ajikamaludin/go-grpc_basic 
-go mod init github.com/ajikamaludin/go-grpc_basic
-go mod tidy
+$ cd $GOPATH/src
+$ mkdir -p github.com/ajikamaludin/go-grpc_basic 
+$ cd github.com/ajikamaludin/go-grpc_basic 
+$ go mod init github.com/ajikamaludin/go-grpc_basic
+$ go mod tidy
 ```
 
 ### Install Protoc
