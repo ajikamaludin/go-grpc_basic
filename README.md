@@ -28,6 +28,7 @@ source ~/.zshrc
 ### Validate GOPATH
 ```bash
 echo $GOPATH
+/home/aji/go
 ```
 
 ### Start Project in Go
