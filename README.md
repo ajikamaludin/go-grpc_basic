@@ -63,6 +63,7 @@ go-outline  grpcurl  protoc-gen-go-grpc  protoc-gen-swagger
 ### Setup Project 
 - create `proto` dir 
 - create versioning dir and service dir `health`
+- exec `get-lib.sh` in `proto` dir to download / get important library to use by `health.proto` usage is in compile proto file
 - create proto file `health.proto`
 - compile / generate proto with `compile-proto.sh` in proto dir
 
@@ -115,7 +116,7 @@ service HealthService {
     }
 }
 ```
-- re - compile / re - generate proto with `compile-proto.sh` in proto dir
+- re - compile / re - generate proto with execute `compile-proto.sh` in proto dir
 - `go mod tidy`
 - `go get "github.com/gorilla/handlers"` TODO: what is for ?
 - create `http.go` in router dir and implement NewHTTPServer and register health api service 
