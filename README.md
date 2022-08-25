@@ -9,6 +9,22 @@ $ go version
 go version go1.18.3 linux/amd64
 ```
 
+### Add GOPATH
+add/edit to your ~/.bashrc or ~/.zshrc file
+```bash
+export GOPATH=/home/{your-user?}/go
+```
+
+dont forget to execute, 
+to reload bash
+```bash
+source ~/.bashrc
+```
+to reload zsh
+```bash
+source ~/.zshrc
+```
+
 ### Validate GOPATH
 ```bash
 echo $GOPATH
@@ -49,14 +65,14 @@ go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger@latest
 ```
 
 ### Add PATH
-add to your ~/.bashrc or ~/.zshrc file
+add/edit to your ~/.bashrc or ~/.zshrc file
 ```bash
 export PATH="$PATH:$GOPATH/bin"
 ```
 ### Validate Protoc Dependency Golang Installation
 ```bash
 ~ ❯ ls $GOPATH/bin                                             
-dlv         gopls    protoc-gen-go       protoc-gen-grpc-gateway  revel
+dlv         gopls    protoc-gen-go       protoc-gen-grpc-gateway 
 go-outline  grpcurl  protoc-gen-go-grpc  protoc-gen-swagger
 ```
 
