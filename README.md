@@ -27,7 +27,7 @@ source ~/.zshrc
 
 ### Validate GOPATH
 ```bash
-echo $GOPATH
+$ echo $GOPATH
 /home/aji/go
 ```
 
