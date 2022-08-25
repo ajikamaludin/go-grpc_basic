@@ -1,7 +1,8 @@
 # GO GRPC BASIC
 
 ## Requirements
-check other branch to step by step create project 
+### `Check other branch to step by step create project from 1/dev, 2/grpc-gateway, etc`
+
 ### Validate Go Installation
 ```bash
 $ go version
