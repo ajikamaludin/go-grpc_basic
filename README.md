@@ -68,7 +68,6 @@ go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger@latest
 ### Add PATH
 add/edit to your ~/.bashrc or ~/.zshrc file
 ```bash
-export GOPATH="/home/aji/go"
 export PATH="$PATH:$GOPATH/bin"
 ```
 ### Validate Protoc Dependency Golang Installation
